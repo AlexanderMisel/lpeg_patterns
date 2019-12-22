@@ -17,10 +17,12 @@ num_defs = {
 }
 
 num = re.compile([[
-  int_num     <- (digit_group+ small_num? / small_num / zero) ~> add !.
-  digit_group <- (small_num mult4) ~> mul
-  small_num   <- four_digit ~> add
-  four_digit  <- start_digit -> sen '千' (zero two_digit / three_digit)? / three_digit
+  int_num     <- (zero -> digits / start_group mid_group* small_num? / start_num) ~> add !.
+  start_group <- ((start_num / '' -> one) mult4) ~> mul
+  mid_group   <- ((small_num / '' -> one) mult4) ~> mul
+  start_num   <- (four_digit / three_digit) ~> add
+  small_num   <- (four_digit / zero? three_digit) ~> add
+  four_digit  <- start_digit -> sen '千' (zero two_digit / three_digit)?
   three_digit <- start_digit -> hyaku '百' (zero one_digit / two_digit)? / two_digit
   two_digit   <- start_digit -> juu '十' one_digit? / one_digit
   one_digit   <- nonzero
