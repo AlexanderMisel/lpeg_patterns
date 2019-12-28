@@ -18,8 +18,8 @@ num_defs = {
 }
 
 num = re.compile([[
-  int_num     <- zero -> digits / '負' pos_num -> minus / pos_num
-  pos_num     <- (digit_group+ small_num? / small_num) ~> add !.
+  int_num     <- (zero -> digits / '負' pos_num -> minus / pos_num) !.
+  pos_num     <- (digit_group+ small_num? / small_num) ~> add
   digit_group <- ((small_num / '' -> one) mult4) ~> mul
   small_num   <- zero? four_digit ~> add
   four_digit  <- start_digit -> sen '千' (zero two_digit / three_digit)? / three_digit
