@@ -14,20 +14,20 @@ num_defs = {
   add = function (a, b) return a + b end,
   mul = function (a, b) return a * b end,
   one = function () return 1 end,
+  minus = function (v) return -v end,
 }
 
 num = re.compile([[
-  int_num     <- (zero -> digits / start_group mid_group* small_num? / start_num) ~> add !.
-  start_group <- ((start_num / '' -> one) mult4) ~> mul
-  mid_group   <- ((small_num / '' -> one) mult4) ~> mul
-  start_num   <- (four_digit / three_digit) ~> add
-  small_num   <- (four_digit / zero? three_digit) ~> add
-  four_digit  <- start_digit -> sen '千' (zero two_digit / three_digit)?
+  int_num     <- zero -> digits / '負' pos_num -> minus / pos_num
+  pos_num     <- (digit_group+ small_num? / small_num) ~> add !.
+  digit_group <- ((small_num / '' -> one) mult4) ~> mul
+  small_num   <- zero? four_digit ~> add
+  four_digit  <- start_digit -> sen '千' (zero two_digit / three_digit)? / three_digit
   three_digit <- start_digit -> hyaku '百' (zero one_digit / two_digit)? / two_digit
   two_digit   <- start_digit -> juu '十' one_digit? / one_digit
   one_digit   <- nonzero
   zero        <- '零'
   start_digit <- nonzero / '' -> one
-  mult4       <- ('萬'/'億'/'兆'/'京'/'垓'/'秭'/'穣'/'溝'/'澗'/'正'/'載'/'極') -> mults4
+  mult4       <- ('萬'/'億'/'兆'/'京'/'垓'/'秭'/'穰'/'溝'/'澗'/'正'/'載'/'極') -> mults4
   nonzero     <- ('一'/'二'/'三'/'四'/'五'/'六'/'七'/'八'/'九') -> digits
 ]], num_defs)
