@@ -1,7 +1,7 @@
-re = require('re')
+re = require('lpeg.re')
 
 arr_int = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 }
-arr_ch = { '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2', '1' }
+arr_ch = { '1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2' }
 
 defs = {
   parity = function(_, pos, p1, p2)
@@ -10,7 +10,8 @@ defs = {
     for i = 1, 17 do
       total = total + arr_int[i] * (tbl[i] - 48)
     end
-    return arr_ch[total % 11] == p2
+    print(arr_ch[total % 11 + 1])
+    return arr_ch[total % 11 + 1] == p2
   end
 }
 
